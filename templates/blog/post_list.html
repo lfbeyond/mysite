@@ -1,0 +1,46 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    {% for post in posts %}
+        <div class="post">
+            <div class="date">
+                {{ post.published_date |date:'m, d, Y'}}
+            </div>
+            <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+            <p>作者： <a class="post-category post-category-js" href="{% url 'search_user' user_id=post.user.id %}">{{ post.user }}</a></p>
+            <p>
+                {% if post.category %}
+                    <a class="post-category post-category-js" href="{% url 'search_tag' tag=post.category %}">
+                    <span class="glyphicon glyphicon-tag"></span>{{ post.category|title }}</a>
+                {% endif %}
+            </p>
+            <p>{{ post.text|safe|linebreaks|truncatewords:5 }}</p>
+            <a class="pure-button" href="{% url 'post_detail' pk=post.pk %}">Read More >>> </a>
+        </div>
+    {% endfor %}
+    {% if page %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if posts.has_previous %}
+                <a href="?page={{ posts.previous_page_number }}">上一页</a>
+            {% endif %}
+            {% for page_number in posts.paginator.page_range %}
+                {% ifequal page_number  posts.number %}
+                    {{ page_number }}
+                {% else %}
+                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+                {% endifequal %}
+            {% endfor %}
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}">下一页</a>
+            {% endif %}
+        </span>
+    </div>
+    <div class="fixed_div">
+        <a id="gotop" href="#" onclick="goTop();return false;">
+            <button type="button" class="btn btn-default btn-lg" style="font-size: 20px">
+                <span class="glyphicon glyphicon-arrow-up"></span>
+            </button>
+        </a>
+    </div>
+{% endif %}
+{% endblock content %}

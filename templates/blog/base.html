@@ -1,0 +1,62 @@
+{% load staticfiles %}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/myblog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/emacs.css' %}">
+    <title>Li's Django Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is a simple django blog!">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <style type="text/css">
+        .fixed_div{
+        position:fixed;
+        right:100px;
+        bottom:100px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="page-header">
+    <div class="row">
+        <div style="float: left" > <h1><a href="/">Li's Django Blog</a></h1></div>
+        <div style="float: right">
+            <li>
+                <form class="pure-form" action="/search/" method="get">
+                 <input class="pure-input-3-3" type="text" name="s" placeholder="搜索"></form>
+            </li>
+            <ul class="nav nav-pills">
+                <li class="active"><a href="{% url 'about_me' %}"><span class="glyphicon glyphicon-user"></span> 关于</a></li>
+                {% if user.is_authenticated %}
+                    <li class="active"><a href="{% url 'post_new' %}"><span class="glyphicon glyphicon-pencil"></span> 新建</a></li>
+                    <li class="active"><a href="{% url 'archives' %}"><span class="glyphicon glyphicon-briefcase"></span> 归档</a></li>
+                    <li class="active"><a href="{% url 'post_draft_list' %}"><span class="glyphicon glyphicon-th-list"></span> 草稿箱</a></li>
+                    <li class="active"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-circle-arrow-down"></span> 注销</a></li>
+                {% else %}
+                    <li class="active"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-circle-arrow-up"></span>登录</a></li>
+                    <li class="active"><a href="{% url 'register' %}"><span class="glyphicon glyphicon-circle-arrow-up"></span>注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+       </div>
+    </div>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}
+                    <div class="post">
+                        <h1><a href="">{{ post.title }}</a></h1>
+                        <p>published: {{ post.published_date }}</p>
+                        <p>{{ post.text|linebreaks }}</p>
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
