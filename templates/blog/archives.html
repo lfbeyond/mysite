@@ -6,7 +6,8 @@
             <li>
                 <div class="date">{{ post.published_date |date:'M d, Y'}}</div>
                 <header class="post-header">
-                    <h5 class="post-title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h5>
+                    <h5 class="post-title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>  </h5>
+		    <p>  <a>作者 ：</a>  <a class="post-category post-category-js" href="{% url 'search_user' user_id=post.user.id %}">{{ post.user }}</a>
                 </header>
             </li>
         {% endfor %}

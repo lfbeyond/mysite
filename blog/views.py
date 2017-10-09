@@ -32,9 +32,9 @@ def post_list(request):
         posts = paginator.page(paginator.num_pages)
     finally:
         for pp in posts:
-            pp.text = markdown2.markdown(pp.text, extras=['fenced-code-blocks'], )
+#            pp.text = markdown2.markdown(pp.text, extras=['fenced-code-blocks'], )
+#            print(pp.text)
             pp.user=pp.author
-            print(pp.user)
     return render(request, 'blog/post_list.html', {'posts': posts, 'page': True})
 
 from django.shortcuts import render, get_object_or_404
@@ -116,7 +116,10 @@ from django.http import Http404
 
 def archives(request):
     try:
+	
         post_list = Article.objects.all().filter(published_date__isnull=False).order_by('-published_date')
+        for a in post_list:
+           a.user=a.author
     except Article.DoesNotExist:
         raise Http404
     return render(request, 'blog/archives.html', {'post_list': post_list, 'error': False})
@@ -224,7 +227,7 @@ def login_view(req):
             else:
                 #比较失败，还在login
                 context = {'isLogin': False,'pawd':False}
-                return render(req, 'login.html', context)
+                return render(req, 'blog/login.html', context)
     else:
         context = {'isLogin': False,'pswd':True}
     return render(req, 'blog/login.html', context)
